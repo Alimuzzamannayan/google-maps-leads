@@ -1,0 +1,185 @@
+{
+  "url": "https://www.google.com/maps/search/software+companies+in+Male%2C+Maldives",
+  "steps": [
+    "Navigated to URL",
+    "Feed found"
+  ],
+  "names_found": 9,
+  "hierarchy": [
+    {
+      "classes": "qBF1Pd fontHeadlineSmall ",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "NrDZNb",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "UaQhfb fontBodyMedium",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "Z8fK3b",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "Lui3Od T7Wufd ",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "y7PRA",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "lI9IFe ",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "bfdHYd Ppzolf OFBs3e  ",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "Nv2PK tH5CWc THOPZb ",
+      "jsaction": "mouseover:pane.wfvdle7;mouseout:pane.wfvdle7",
+      "jslog": null,
+      "role": "article",
+      "tag": "DIV"
+    },
+    {
+      "classes": "",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "m6QErb DxyBCb kA9KIf dS8AEf XiKgde ecceSd",
+      "jsaction": null,
+      "jslog": null,
+      "role": "feed",
+      "tag": "DIV"
+    },
+    {
+      "classes": "m6QErb DxyBCb kA9KIf dS8AEf XiKgde ecceSd ",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "m6QErb WNBkOb XiKgde ",
+      "jsaction": null,
+      "jslog": "25180;mutable:true;",
+      "role": "main",
+      "tag": "DIV"
+    },
+    {
+      "classes": "aIFcqe",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "e07Vkf kA9KIf",
+      "jsaction": "focus:scrollable.focus; blur:scrollable.blur",
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "k7jAl miFGmb lJ3Kh PLbyfe",
+      "jsaction": "mouseover:pane.wfvdle0; mouseout:pane.wfvdle1",
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "bJzME tTVLSc",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "w6VYqd",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "XltNde tTVLSc ",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "g2LZJb",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "UL7Qtf",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "lbMcOd y2iKwd cSgCkb eZfyae xcUKcd y2Sqzf",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    },
+    {
+      "classes": "",
+      "jsaction": null,
+      "jslog": null,
+      "role": null,
+      "tag": "DIV"
+    }
+  ],
+  "marker_counts": {
+    ".Nv2PK": 9,
+    ".hfpxzc": 9,
+    ".lI9IFe": 9,
+    "[role='article']": 9,
+    "div.m6QErb": 8
+  }
+}

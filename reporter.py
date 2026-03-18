@@ -196,6 +196,7 @@ def build_html_email(stats, errors):
     """
     
     # Add new companies section
+    new_companies_details = stats.get('new_companies_details', [])
     if new_companies_details:
         html += """
                 <div class="section">
@@ -231,6 +232,7 @@ def build_html_email(stats, errors):
         """
     
     # Add updated companies section
+    updated_companies_details = stats.get('updated_companies_details', [])
     if updated_companies_details:
         html += """
                 <div class="section">

@@ -113,7 +113,7 @@ def load_data():
 
 def load_status():
     if not os.path.exists(DB_PATH):
-        return "Waiting...", None
+        return "Waiting for scraper...", None
     try:
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
@@ -121,10 +121,10 @@ def load_status():
         row = cursor.fetchone()
         conn.close()
         if row:
-            return row[0] if row[0] else "No status", row[1]
-        return "No record", None
+            return row[0] if row[0] else "No status yet", row[1]
+        return "No record found", None
     except Exception:
-        return "Error", None
+        return "Checking status...", None
 
 def extract_coords(address):
     if not address or pd.isna(address): return None, None
@@ -168,10 +168,11 @@ with st.sidebar:
     
     # Use native Streamlit components for status
     status_display = str(status_text)[:30] if status_text else "Unknown"
-    if "Error" in status_text or "Failed" in status_text:
+    # Check for actual error status from database, not fallback strings
+    if status_text and ("Error" in status_text or "Failed" in status_text) and status_text not in ["Checking status...", "Waiting for scraper..."]:
         st.error(f"❌ {status_display}")
         is_running = False
-    elif any(x in status_text for x in ["Sleeping", "Idle", "Stopped", "Completed"]):
+    elif status_text and any(x in status_text for x in ["Sleeping", "Idle", "Stopped", "Completed", "Scheduler"]):
         st.info(f"💤 {status_display}")
         is_running = False
     else:

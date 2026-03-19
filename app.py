@@ -166,15 +166,16 @@ st.caption("📍 Google Maps • Maldives")
 with st.sidebar:
     st.header("🚀 Scraper")
     
-    # Compact status
+    # Compact status - escape HTML characters
+    safe_status = str(status_text)[:25].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
     if "Error" in status_text or "Failed" in status_text:
-        st.markdown(f'<div class="flex items-center text-red-600 font-medium"><span class="status-dot status-error"></span>{status_text[:25]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="flex items-center text-red-600 font-medium"><span class="status-dot status-error"></span>{safe_status}</div>', unsafe_allow_html=True)
         is_running = False
     elif any(x in status_text for x in ["Sleeping", "Idle", "Stopped"]):
-        st.markdown(f'<div class="flex items-center text-gray-500 font-medium"><span class="status-dot status-idle"></span>{status_text[:25]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="flex items-center text-gray-500 font-medium"><span class="status-dot status-idle"></span>{safe_status}</div>', unsafe_allow_html=True)
         is_running = False
     else:
-        st.markdown(f'<div class="flex items-center text-green-600 font-medium"><span class="status-dot status-running"></span>{status_text[:25]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="flex items-center text-green-600 font-medium"><span class="status-dot status-running"></span>{safe_status}</div>', unsafe_allow_html=True)
         is_running = True
     
     # Compact time info

@@ -279,14 +279,14 @@ elif st.session_state.get('web') == "No Website": fdf = fdf[(fdf['website'].isna
 tab1, tab2, tab3 = st.tabs(["📋 Data", "📊 Chart", "🗺️ Map"])
 with tab1:
     cols = [c for c in ['name', 'rating', 'category', 'address', 'phone', 'email', 'website', 'timestamp'] if c in fdf.columns]
-    st.dataframe(fdf[cols], use_container_width=True, hide_index=True, height=400)
+    st.dataframe(fdf[cols], width='stretch', hide_index=True, height=400)
 with tab2:
     if 'category' in fdf.columns:
-        st.bar_chart(fdf['category'].value_counts(), use_container_width=True)
+        st.bar_chart(fdf['category'].value_counts(), width='stretch')
 with tab3:
     mdf = fdf.dropna(subset=['latitude', 'longitude'])
     if not mdf.empty:
-        st.map(mdf, use_container_width=True)
+        st.map(mdf, width='stretch')
     else: st.info("No coordinates")
 
 # Bottom nav

@@ -6,10 +6,51 @@ import re
 import subprocess
 import sys
 from streamlit_autorefresh import st_autorefresh
+import datetime
 
 st.set_page_config(page_title="Business Leads Dashboard", page_icon="🏢", layout="wide")
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "data.db")
+
+def get_time_info():
+    """Get last updated time in local timezone and calculate next run."""
+    if not os.path.exists(DB_PATH):
+        return None, None, None
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT last_updated FROM scraper_status WHERE id = 1")
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row and row[0]:
+            # Parse the ISO timestamp
+            last_updated = datetime.datetime.fromisoformat(row[0])
+            
+            # Get local timezone offset (assuming UTC+5 for Tashkent)
+            # You can adjust this or make it dynamic
+            local_tz = datetime.timezone(datetime.timedelta(hours=5))
+            last_updated_local = last_updated.replace(tzinfo=datetime.timezone.utc).astimezone(local_tz)
+            
+            # Calculate next run (72 hours from last run)
+            next_run = last_updated + datetime.timedelta(hours=72)
+            next_run_local = next_run.replace(tzinfo=datetime.timezone.utc).astimezone(local_tz)
+            
+            # Calculate time remaining
+            now = datetime.datetime.now(local_tz)
+            time_remaining = next_run_local - now
+            
+            if time_remaining.total_seconds() < 0:
+                time_remaining_text = "Overdue - run now!"
+            else:
+                hours = int(time_remaining.total_seconds() // 3600)
+                minutes = int((time_remaining.total_seconds() % 3600) // 60)
+                time_remaining_text = f"{hours}h {minutes}m"
+            
+            return last_updated_local, next_run_local, time_remaining_text
+    except Exception:
+        pass
+    return None, None, None
 
 def load_data():
     if not os.path.exists(DB_PATH):
@@ -108,8 +149,13 @@ with st.sidebar:
         st.success(f"**🤖 Status:** {status_text}")
         is_running = True
     
-    if last_updated:
-        st.caption(f"*Last Updated: {last_updated}*")
+    # Get timezone-aware time info
+    last_updated_local, next_run_local, time_remaining_text = get_time_info()
+    
+    if last_updated_local:
+        st.caption(f"*Last Updated: {last_updated_local.strftime('%Y-%m-%d %H:%M:%S')} (UTC+5)*")
+        st.caption(f"*Next Scheduled Run: {next_run_local.strftime('%Y-%m-%d %H:%M:%S')} (UTC+5)*")
+        st.caption(f"*⏱️ Time Until Next Run: {time_remaining_text}*")
     
     # Start/Stop Button
     if st.button("▶️ Start Scraper", disabled=is_running, use_container_width=True):

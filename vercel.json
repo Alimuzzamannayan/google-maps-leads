@@ -1,5 +1,15 @@
 {
     "buildCommand": "pip install --break-system-packages -r requirements.txt",
     "installCommand": "pip install --break-system-packages -r requirements.txt",
-    "outputDirectory": "."
+    "outputDirectory": ".",
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/app.py"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/app.py"
+        }
+    ]
 }

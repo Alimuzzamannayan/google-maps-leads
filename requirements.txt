@@ -2,3 +2,4 @@ nicegui
 supabase
 pandas
 schedule
+--index-url https://pypi.org/simple/

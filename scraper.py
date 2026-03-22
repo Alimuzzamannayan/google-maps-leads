@@ -17,6 +17,17 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 DB_NAME = "data.db"
 SETTINGS_FILE = "settings.json"
 
+# Use Supabase if environment variable is set
+USE_SUPABASE = os.environ.get("USE_SUPABASE", "true").lower() == "true"
+
+if USE_SUPABASE:
+    try:
+        from database import supabase, get_leads_by_name, upsert_lead, update_status as db_update_status, get_status as db_get_status
+        print("[INFO] Using Supabase for data storage")
+    except Exception as e:
+        print(f"[WARN] Could not load Supabase: {e}")
+        USE_SUPABASE = False
+
 # ── Proxy Pool ────────────────────────────────────────────────────────────────
 # Add real proxy credentials. Leave empty [] to run without proxy.
 PROXY_POOL = [
@@ -31,6 +42,10 @@ def get_random_proxy():
 # ── Database ──────────────────────────────────────────────────────────────────
 
 def init_db():
+    if USE_SUPABASE:
+        # Supabase doesn't need local initialization
+        return None
+    
     conn = sqlite3.connect(DB_NAME)
     conn.execute('''CREATE TABLE IF NOT EXISTS leads (
         id        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,6 +76,11 @@ def init_db():
 
 
 def update_status(msg, conn=None):
+    if USE_SUPABASE:
+        db_update_status(msg)
+        print(f"[STATUS] {msg}")
+        return
+    
     close = False
     if conn is None:
         conn = sqlite3.connect(DB_NAME)

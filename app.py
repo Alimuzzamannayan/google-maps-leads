@@ -1,5 +1,4 @@
 import streamlit as st
-import sqlite3
 import pandas as pd
 import os
 import re
@@ -7,6 +6,7 @@ import subprocess
 import sys
 from streamlit_autorefresh import st_autorefresh
 import datetime
+from database import get_leads, get_status, get_time_info, get_lead_count
 
 st.set_page_config(page_title="Business Leads Dashboard", page_icon="🏢", layout="wide")
 
@@ -65,66 +65,30 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "data.db")
-
-def get_time_info():
-    if not os.path.exists(DB_PATH):
-        return None, None, None
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("SELECT last_updated FROM scraper_status WHERE id = 1")
-        row = cursor.fetchone()
-        conn.close()
-        if row and row[0]:
-            last_updated = datetime.datetime.fromisoformat(row[0])
-            local_tz = datetime.timezone(datetime.timedelta(hours=5))
-            last_updated_local = last_updated.replace(tzinfo=datetime.timezone.utc).astimezone(local_tz)
-            next_run = last_updated + datetime.timedelta(hours=72)
-            next_run_local = next_run.replace(tzinfo=datetime.timezone.utc).astimezone(local_tz)
-            now = datetime.datetime.now(local_tz)
-            time_remaining = next_run_local - now
-            if time_remaining.total_seconds() < 0:
-                time_remaining_text = "Overdue!"
-            else:
-                hours = int(time_remaining.total_seconds() // 3600)
-                minutes = int((time_remaining.total_seconds() % 3600) // 60)
-                time_remaining_text = f"{hours}h {minutes}m"
-            return last_updated_local, next_run_local, time_remaining_text
-    except Exception:
-        pass
-    return None, None, None
+# Use Supabase - no local DB needed
 
 def load_data():
-    if not os.path.exists(DB_PATH):
-        return pd.DataFrame()
     try:
-        conn = sqlite3.connect(DB_PATH)
-        df = pd.read_sql_query("SELECT * FROM leads", conn)
-        conn.close()
-        if not df.empty and 'name' in df.columns and 'timestamp' in df.columns:
-            df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
-            df = df.sort_values('timestamp', ascending=False)
-            df = df.drop_duplicates(subset=['name'], keep='first')
-            df['timestamp'] = df['timestamp'].dt.strftime('%Y-%m-%d %H:%M')
-        return df
+        leads = get_leads()
+        if leads:
+            df = pd.DataFrame(leads)
+            if not df.empty and 'timestamp' in df.columns:
+                df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
+                df = df.sort_values('timestamp', ascending=False)
+                df['timestamp'] = df['timestamp'].dt.strftime('%Y-%m-%d %H:%M')
+            return df
+        return pd.DataFrame()
     except Exception:
         return pd.DataFrame()
 
 def load_status():
-    if not os.path.exists(DB_PATH):
-        return "Waiting for scraper...", None
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("SELECT status, last_updated FROM scraper_status WHERE id = 1")
-        row = cursor.fetchone()
-        conn.close()
-        if row:
-            return row[0] if row[0] else "No status yet", row[1]
+        status = get_status()
+        if status:
+            return status.get('status', 'No status'), status.get('last_updated')
         return "No record found", None
     except Exception:
-        return "Checking status...", None
+        return "Connecting to database...", None
 
 def extract_coords(address):
     if not address or pd.isna(address): return None, None

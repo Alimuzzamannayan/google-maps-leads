@@ -205,8 +205,8 @@ async def root(request: Request):
 
             function updateStats() {
                 document.getElementById('totalLeads').textContent = allLeads.length;
-                document.getElementById('withPhone').textContent = allLeads.filter(l => l.phone).length;
-                document.getElementById('withWebsite').textContent = allLeads.filter(l => l.website).length;
+                document.getElementById('withPhone').textContent = allLeads.filter(l => l.phone && l.phone !== 'N/A').length;
+                document.getElementById('withWebsite').textContent = allLeads.filter(l => l.website && l.website !== 'N/A').length;
                 
                 const categories = [...new Set(allLeads.map(l => l.category).filter(Boolean))];
                 document.getElementById('categories').textContent = categories.length;
@@ -230,8 +230,8 @@ async def root(request: Request):
                         (lead.address && lead.address.toLowerCase().includes(search));
                     const matchCategory = !category || lead.category === category;
                     const matchPhone = !hasPhone || 
-                        (hasPhone === 'yes' && lead.phone) || 
-                        (hasPhone === 'no' && !lead.phone);
+                        (hasPhone === 'yes' && lead.phone && lead.phone !== 'N/A') || 
+                        (hasPhone === 'no' && (!lead.phone || lead.phone === 'N/A'));
                     return matchSearch && matchCategory && matchPhone;
                 });
 
@@ -265,8 +265,8 @@ async def root(request: Request):
                             </td>
                             <td class="px-6 py-4 text-gray-600 text-sm">${lead.address || 'N/A'}</td>
                             <td class="px-6 py-4">
-                                ${lead.phone ? `<a href="tel:${lead.phone}" class="text-green-600 hover:text-green-700"><i class="fas fa-phone"></i> ${lead.phone}</a>` : '<span class="text-gray-400">-</span>'}
-                                ${lead.website ? `<br><a href="${lead.website}" target="_blank" class="text-blue-600 hover:text-blue-700 text-sm"><i class="fas fa-globe"></i> Website</a>` : ''}
+                                ${(lead.phone && lead.phone !== 'N/A') ? `<a href="tel:${lead.phone}" class="text-green-600 hover:text-green-700"><i class="fas fa-phone"></i> ${lead.phone}</a>` : '<span class="text-gray-400">-</span>'}
+                                ${(lead.website && lead.website !== 'N/A') ? `<br><a href="${lead.website}" target="_blank" class="text-blue-600 hover:text-blue-700 text-sm"><i class="fas fa-globe"></i> Website</a>` : ''}
                             </td>
                             <td class="px-6 py-4">
                                 <button onclick="copyToClipboard('${lead.name || ''}', '${lead.phone || ''}', '${lead.email || ''}')" 

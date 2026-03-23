@@ -7,17 +7,9 @@ from supabase import create_client, Client
 import pandas as pd
 from datetime import datetime
 import json
+from database import supabase
 
 app = FastAPI()
-
-# Get Supabase credentials from environment
-SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
-SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
-
-# Initialize Supabase client
-supabase: Client = None
-if SUPABASE_URL and SUPABASE_KEY:
-    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
@@ -343,7 +335,7 @@ async def get_leads():
         return {"leads": [], "error": "Supabase not configured"}
     
     try:
-        response = supabase.table('leads').select('*').order('created_at', desc=True).execute()
+        response = supabase.table('leads').select('*').order('timestamp', desc=True).execute()
         return {"leads": response.data}
     except Exception as e:
         return {"leads": [], "error": str(e)}

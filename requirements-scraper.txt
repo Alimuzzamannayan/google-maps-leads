@@ -1,0 +1,9 @@
+undetected-chromedriver
+selenium
+schedule
+fastapi
+uvicorn
+supabase
+pandas
+jinja2
+python-multipart
